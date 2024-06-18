@@ -1,0 +1,61 @@
+#include <stdio.h>
+// Function prototype
+void sortDescending(int arr[], int n);
+int findRank(int arr[], int n, int marks);
+double calculatePercentile(int rank, int n);
+
+int main() {
+    int n, marks;
+    printf("Enter the number of students: ");
+    scanf("%d", &n);
+
+    int scores[n];
+    printf("Enter the marks of the students:\n");
+    for (int i = 0; i < n; i++) {
+        printf("Student %d: ", i + 1);
+        scanf("%d", &scores[i]);
+    }
+
+    printf("Enter the marks to find the rank and percentile: ");
+    scanf("%d", &marks);
+
+    sortDescending(scores, n);
+
+    int rank = findRank(scores, n, marks);
+    if (rank == -1) {
+        printf("Marks %d not found in the list.\n", marks);
+    } else {
+        double percentile = calculatePercentile(rank, n);
+        printf("The rank for marks %d is %d.\n", marks, rank);
+        printf("The percentile for marks %d is %.2f%%.\n", marks, percentile);
+    }
+
+    return 0;
+}
+
+// Function to sort an array in descending order
+void sortDescending(int arr[], int n) {
+    int temp;
+    for (int i = 0; i < n-1; i++) {
+        for (int j = i+1; j < n; j++) {
+            if (arr[i] < arr[j]) {
+                temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+    }
+}
+// Function to find the rank of the given marks
+int findRank(int arr[], int n, int marks) {
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == marks) {
+            return i + 1;
+        }
+    }
+    return -1;  // Marks not found
+}
+// Function to calculate the percentile based on rank
+double calculatePercentile(int rank, int n) {
+    return ((n - rank) / (double)n) * 100;
+}
