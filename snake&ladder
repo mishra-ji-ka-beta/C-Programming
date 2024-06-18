@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+// Board size
+#define BOARD_SIZE 100
+
+// Snake and ladder positions
+int snakes[] = {16, 47, 49, 56, 62, 64, 87, 93, 95, 98};
+int snakeTails[] = {6, 26, 11, 53, 19, 60, 24, 73, 75, 78};
+int ladders[] = {1, 4, 9, 21, 28, 36, 51, 71, 80};
+int ladderTops[] = {38, 14, 31, 42, 84, 44, 67, 91, 100};
+
+// Function to roll the dice
+int rollDice() {
+    return (rand() % 6) + 1;
+}
+
+// Function to check for snakes or ladders
+int checkPosition(int pos) {
+    for (int i = 0; i < sizeof(snakes)/sizeof(snakes[0]); i++) {
+        if (pos == snakes[i]) {
+            printf("Oops! You landed on a snake. Go down to %d.\n", snakeTails[i]);
+            return snakeTails[i];
+        }
+    }
+    for (int i = 0; i < sizeof(ladders)/sizeof(ladders[0]); i++) {
+        if (pos == ladders[i]) {
+            printf("Yay! You landed on a ladder. Go up to %d.\n", ladderTops[i]);
+            return ladderTops[i];
+        }
+    }
+    return pos;
+}
+
+// Main function
+int main() {
+    srand(time(0));  // Seed the random number generator
+    int position = 0;
+    char choice;
+
+    printf("Welcome to the Snake and Ladder game!\n");
+
+    while (position < BOARD_SIZE) {
+        printf("Press 'r' to roll the dice: ");
+        scanf(" %c", &choice);
+
+        if (choice == 'r' || choice == 'R') {
+            int dice = rollDice();
+            printf("You rolled a %d.\n", dice);
+
+            position += dice;
+
+            if (position > BOARD_SIZE) {
+                position -= dice;  // Stay in the same position if it goes beyond the board size
+                printf("You need to roll the exact number to reach 100. Try again.\n");
+            } else {
+                position = checkPosition(position);
+                printf("You are now on square %d.\n", position);
+            }
+        } else {
+            printf("Invalid input. Please press 'r' to roll the dice.\n");
+        }
+    }
+
+    printf("Congratulations! You have reached square 100 and won the game!\n");
+
+    return 0;
+}
