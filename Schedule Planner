@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <string.h>
+
+// Defining the structure for a day's schedule
+typedef struct {
+    char day[10];
+    char tasks[5][50];
+    int taskCount;
+} Schedule;
+
+void inputSchedule(Schedule *weekSchedule);
+void displaySchedule(Schedule *weekSchedule);
+
+int main() {
+    Schedule weekSchedule[5] = {
+        {"Monday", {}, 0},
+        {"Tuesday", {}, 0},
+        {"Wednesday", {}, 0},
+        {"Thursday", {}, 0},
+        {"Friday", {}, 0}
+    };
+
+    inputSchedule(weekSchedule);
+    displaySchedule(weekSchedule);
+
+    return 0;
+}
+
+void inputSchedule(Schedule *weekSchedule) {
+    printf("Enter your schedule for the weekdays:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%s:\n", weekSchedule[i].day);
+        printf("How many tasks do you have on %s? ", weekSchedule[i].day);
+        scanf("%d", &weekSchedule[i].taskCount);
+        getchar();  
+        for (int j = 0; j < weekSchedule[i].taskCount; j++) {
+            printf("Enter task %d: ", j + 1);
+            fgets(weekSchedule[i].tasks[j], 50, stdin);
+            weekSchedule[i].tasks[j][strcspn(weekSchedule[i].tasks[j], "\n")] = '\0';
+        }
+    }
+}
+
+void displaySchedule(Schedule *weekSchedule) {
+    printf("\nYour schedule for the week:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("%s:\n", weekSchedule[i].day);
+        for (int j = 0; j < weekSchedule[i].taskCount; j++) {
+            printf("  Task %d: %s\n", j + 1, weekSchedule[i].tasks[j]);
+        }
+    }
+}
